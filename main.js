@@ -1,6 +1,9 @@
 "use strict";
 
 import "./style.css";
+const totalIncome = document.querySelector(".total__income");
+const totalTransactions = document.querySelector(".total__transactions");
+const balance = document.querySelector(".balance");
 const incomeList = document.querySelector(".income__list");
 const transactionsList = document.querySelector(".transaction__list");
 const incomeForm = document.querySelector(".income__form");
@@ -38,6 +41,24 @@ class BalanceManager {
     this.transactions = this.transactions.filter(
       (transaction) => transaction.id !== id
     );
+  }
+  getTotalIncome() {
+    let totalIncome = 0;
+    for (let i = 0; i <= this.incomes.length - 1; i++) {
+      totalIncome = totalIncome + Number(this.incomes[i].amount);
+    }
+    return totalIncome;
+  }
+  getTotalTransactions() {
+    let totalTransactions = 0;
+    for (let i = 0; i <= this.transactions.length - 1; i++) {
+      totalTransactions =
+        totalTransactions + Number(this.transactions[i].amount);
+    }
+    return totalTransactions;
+  }
+  getBalance() {
+    return this.getTotalIncome() - this.getTotalTransactions();
   }
   renderIncome() {
     incomeList.innerHTML = "";
@@ -104,6 +125,8 @@ incomeForm.addEventListener("submit", function (event) {
   event.preventDefault();
   balanceManager.addIncome(new Income(incomeName, incomeAmount));
   balanceManager.renderIncome();
+  totalIncome.textContent = `Total income: ${balanceManager.getTotalIncome()}$`;
+  balance.textContent = `Balance: ${balanceManager.getBalance()}$`;
   inputIncomeName.value = "";
   inputIncomeAmount.value = "";
 });
@@ -114,22 +137,10 @@ transactionsForm.addEventListener("submit", function (event) {
     new Transaction(transactionName, transactionAmount)
   );
   balanceManager.renderTransaction();
+  totalTransactions.textContent = `Total transactions: -${balanceManager.getTotalTransactions()}$`;
+  balance.textContent = `Balance: ${balanceManager.getBalance()}$`;
   inputTransactionName.value = "";
   inputTransactionAmount.value = "";
-});
-
-const deleteBtns = document.querySelectorAll(".btn__delete");
-deleteBtns.forEach((btn) => {
-  btn.addEventListener("click", function () {
-    const li = btn.closest("li");
-    const id = li.id;
-    console.log(li);
-    if (li.classList.contains("list__item")) {
-      console.log(balanceManager);
-      balanceManager.deleteIncome(id);
-      li.remove();
-    }
-  });
 });
 
 incomeList.addEventListener("click", function (event) {
