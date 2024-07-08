@@ -1,0 +1,39 @@
+html {
+  font-size: 62.5%;
+}
+
+body {
+  background: linear-gradient(0deg, #d4f1f1, #97e0a0, #2db425);
+  min-height: 100vh;
+}
+
+.container {
+  display: flex;
+  justify-content: space-around;
+  align-items: start;
+}
+
+.card {
+  background-color: #fff;
+  padding: 3rem;
+  border-radius: 2rem;
+}
+
+.title {
+  text-align: center;
+}
+
+.input__div {
+  display: flex;
+  font-size: 2rem;
+  gap: 2rem;
+  margin-top: 4rem;
+}
+
+.input {
+  max-width: 8rem;
+}
+
+.list {
+  min-height: 20rem;
+}
