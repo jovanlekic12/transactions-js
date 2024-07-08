@@ -31,10 +31,18 @@ class BalanceManager {
   addTransaction(transaction) {
     this.transactions.push(transaction);
   }
+  deleteIncome(id) {
+    this.incomes = this.incomes.filter((income) => income.id !== id);
+  }
+  deleteTransaction(id) {
+    this.transactions = this.transactions.filter(
+      (transaction) => transaction.id !== id
+    );
+  }
   renderIncome() {
     incomeList.innerHTML = "";
     this.incomes.forEach((income) => {
-      const html = `<li class="list__item" id="${income.id}">
+      const html = `<li class="list__item list__item__income" id="${income.id}">
       <h1 class="income__name">${income.name}</h1>
       <h1 class="income__amount">${income.amount}$</h1>
       <button class="btn btn__delete">DELETE</button>
@@ -45,7 +53,7 @@ class BalanceManager {
   renderTransaction() {
     transactionsList.innerHTML = "";
     this.transactions.forEach((transaction) => {
-      const html = `<li class="list__item" id="${transaction.id}">
+      const html = `<li class="list__item list__item__transaction" id="${transaction.id}">
       <h1 class="income__name">${transaction.name}</h1>
       <h1 class="income__amount">${transaction.amount}$</h1>
       <button class="btn btn__delete">DELETE</button>
@@ -108,4 +116,36 @@ transactionsForm.addEventListener("submit", function (event) {
   balanceManager.renderTransaction();
   inputTransactionName.value = "";
   inputTransactionAmount.value = "";
+});
+
+const deleteBtns = document.querySelectorAll(".btn__delete");
+deleteBtns.forEach((btn) => {
+  btn.addEventListener("click", function () {
+    const li = btn.closest("li");
+    const id = li.id;
+    console.log(li);
+    if (li.classList.contains("list__item")) {
+      console.log(balanceManager);
+      balanceManager.deleteIncome(id);
+      li.remove();
+    }
+  });
+});
+
+incomeList.addEventListener("click", function (event) {
+  if (event.target.classList.contains("btn__delete")) {
+    const li = event.target.closest("li");
+    const id = li.id;
+    balanceManager.deleteIncome(id);
+    li.remove();
+  }
+});
+
+transactionsList.addEventListener("click", function (event) {
+  if (event.target.classList.contains("btn__delete")) {
+    const li = event.target.closest("li");
+    const id = li.id;
+    balanceManager.deleteTransaction(id);
+    li.remove();
+  }
 });
