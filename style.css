@@ -30,10 +30,35 @@ body {
   margin-top: 4rem;
 }
 
+.input__div div {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .input {
   max-width: 8rem;
+  border-radius: 2rem;
 }
 
 .list {
   min-height: 20rem;
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.list__item {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #dadada;
+  border-radius: 2rem;
+}
+
+.btn {
+  border-radius: 2rem;
+  padding: 0.5rem;
 }
