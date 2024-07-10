@@ -66,6 +66,10 @@ body {
   padding: 0.5rem;
 }
 
+.btn:hover {
+  cursor: pointer;
+}
+
 .notification {
   border-radius: 2rem;
   background: #2db425;

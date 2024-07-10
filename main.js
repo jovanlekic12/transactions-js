@@ -76,8 +76,9 @@ class BalanceManager {
     transactionsList.innerHTML = "";
     this.transactions.forEach((transaction) => {
       const html = `<li class="list__item list__item__transaction" id="${transaction.id}">
-      <h1 class="income__name">${transaction.name}</h1>
-      <h1 class="income__amount">${transaction.amount}$</h1>
+      <h1 class="transaction__name">${transaction.name}</h1>
+      <h1 class="transaction__amount">${transaction.amount}$</h1>
+      <h1 class="transaction__date">${transaction.date}</h1>
       <button class="btn btn__delete">DELETE</button>
       </li>`;
       transactionsList.insertAdjacentHTML("afterbegin", html);
@@ -151,7 +152,7 @@ incomeForm.addEventListener("submit", function (event) {
 
 transactionsForm.addEventListener("submit", function (event) {
   event.preventDefault();
-  if (transactionAmount < balanceManager.getBalance()) {
+  if (transactionAmount <= balanceManager.getBalance()) {
     balanceManager.addTransaction(
       new Transaction(
         transactionName,
