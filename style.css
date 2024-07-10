@@ -11,7 +11,9 @@ body {
   display: flex;
   justify-content: space-around;
   align-items: start;
-  margin-top: 5rem;
+  margin-top: 10rem;
+  flex-wrap: wrap;
+  row-gap: 2rem;
 }
 
 .card {
@@ -62,4 +64,17 @@ body {
 .btn {
   border-radius: 2rem;
   padding: 0.5rem;
+}
+
+.notification {
+  border-radius: 2rem;
+  background: #2db425;
+  font-size: 2rem;
+}
+
+.transaction {
+  background: red;
+}
+.no__money {
+  background: rgb(235, 153, 45);
 }

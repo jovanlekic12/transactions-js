@@ -1,6 +1,6 @@
 "use strict";
-
 import "./style.css";
+import { format, parseISO } from "date-fns";
 const totalIncome = document.querySelector(".total__income");
 const totalTransactions = document.querySelector(".total__transactions");
 const balance = document.querySelector(".balance");
@@ -66,6 +66,7 @@ class BalanceManager {
       const html = `<li class="list__item list__item__income" id="${income.id}">
       <h1 class="income__name">${income.name}</h1>
       <h1 class="income__amount">${income.amount}$</h1>
+      <h1 class="income__date">${income.date}<h1>
       <button class="btn btn__delete">DELETE</button>
       </li>`;
       incomeList.insertAdjacentHTML("afterbegin", html);
@@ -87,8 +88,10 @@ class BalanceManager {
 class Income {
   id;
   name;
+  date;
   amount;
-  constructor(name, amount) {
+  constructor(name, amount, date) {
+    this.date = date;
     this.id = self.crypto.randomUUID();
     this.name = name;
     this.amount = amount;
@@ -99,7 +102,8 @@ class Transaction {
   id;
   name;
   amount;
-  constructor(name, amount) {
+  constructor(name, amount, date) {
+    this.date = date;
     this.id = self.crypto.randomUUID();
     this.name = name;
     this.amount = amount;
@@ -123,8 +127,22 @@ inputTransactionAmount.addEventListener("change", function () {
 
 incomeForm.addEventListener("submit", function (event) {
   event.preventDefault();
-  balanceManager.addIncome(new Income(incomeName, incomeAmount));
+  balanceManager.addIncome(
+    new Income(incomeName, incomeAmount, format(new Date(), "dd.MM.yyyy"))
+  );
   balanceManager.renderIncome();
+  Toastify({
+    text: `YOU HAVE NEW INCOME ${incomeAmount}$`,
+    duration: 3000,
+    destination: "",
+    className: "notification",
+    newWindow: true,
+    close: true,
+    gravity: "top", // `top` or `bottom`
+    position: "right", // `left`, `center` or `right`
+    stopOnFocus: true, // Prevents dismissing of toast on hover
+    onClick: function () {}, // Callback after click
+  }).showToast();
   totalIncome.textContent = `Total income: ${balanceManager.getTotalIncome()}$`;
   balance.textContent = `Balance: ${balanceManager.getBalance()}$`;
   inputIncomeName.value = "";
@@ -133,14 +151,45 @@ incomeForm.addEventListener("submit", function (event) {
 
 transactionsForm.addEventListener("submit", function (event) {
   event.preventDefault();
-  balanceManager.addTransaction(
-    new Transaction(transactionName, transactionAmount)
-  );
-  balanceManager.renderTransaction();
-  totalTransactions.textContent = `Total transactions: -${balanceManager.getTotalTransactions()}$`;
-  balance.textContent = `Balance: ${balanceManager.getBalance()}$`;
-  inputTransactionName.value = "";
-  inputTransactionAmount.value = "";
+  if (transactionAmount < balanceManager.getBalance()) {
+    balanceManager.addTransaction(
+      new Transaction(
+        transactionName,
+        transactionAmount,
+        format(new Date(), "dd.MM.yyyy")
+      )
+    );
+    balanceManager.renderTransaction();
+    Toastify({
+      text: `YOU HAVE NEW TRANSACTION -${transactionAmount}$`,
+      duration: 3000,
+      className: "notification transaction",
+      destination: "",
+      newWindow: true,
+      close: true,
+      gravity: "top", // `top` or `bottom`
+      position: "right", // `left`, `center` or `right`
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      onClick: function () {}, // Callback after click
+    }).showToast();
+    totalTransactions.textContent = `Total transactions: -${balanceManager.getTotalTransactions()}$`;
+    balance.textContent = `Balance: ${balanceManager.getBalance()}$`;
+    inputTransactionName.value = "";
+    inputTransactionAmount.value = "";
+  } else {
+    Toastify({
+      text: `YOU DON'T HAVE ENOUGH MONEY!`,
+      duration: 3000,
+      className: "notification no__money",
+      destination: "",
+      newWindow: true,
+      close: true,
+      gravity: "top", // `top` or `bottom`
+      position: "center", // `left`, `center` or `right`
+      stopOnFocus: true, // Prevents dismissing of toast on hover
+      onClick: function () {}, // Callback after click
+    }).showToast();
+  }
 });
 
 incomeList.addEventListener("click", function (event) {
@@ -148,6 +197,8 @@ incomeList.addEventListener("click", function (event) {
     const li = event.target.closest("li");
     const id = li.id;
     balanceManager.deleteIncome(id);
+    totalIncome.textContent = `Total income: ${balanceManager.getTotalIncome()}$`;
+    balance.textContent = `Balance: ${balanceManager.getBalance()}$`;
     li.remove();
   }
 });
@@ -157,6 +208,8 @@ transactionsList.addEventListener("click", function (event) {
     const li = event.target.closest("li");
     const id = li.id;
     balanceManager.deleteTransaction(id);
+    totalTransactions.textContent = `Total transactions: -${balanceManager.getTotalTransactions()}$`;
+    balance.textContent = `Balance: ${balanceManager.getBalance()}$`;
     li.remove();
   }
 });
