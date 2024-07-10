@@ -82,3 +82,8 @@ body {
 .no__money {
   background: rgb(235, 153, 45);
 }
+
+#sort {
+  padding: 0.4rem;
+  border-radius: 2rem;
+}

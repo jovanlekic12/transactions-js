@@ -1,6 +1,8 @@
 "use strict";
 import "./style.css";
 import { format, parseISO } from "date-fns";
+const sortIncomes = document.querySelector(".sort__incomes");
+const sortTransactions = document.querySelector(".sort__transactions");
 const totalIncome = document.querySelector(".total__income");
 const totalTransactions = document.querySelector(".total__transactions");
 const balance = document.querySelector(".balance");
@@ -59,6 +61,36 @@ class BalanceManager {
   }
   getBalance() {
     return this.getTotalIncome() - this.getTotalTransactions();
+  }
+
+  sortIncomes(value) {
+    if (value === "low") {
+      this.incomes.sort((a, b) => b.amount - a.amount);
+    }
+    if (value === "high") {
+      this.incomes.sort((a, b) => a.amount - b.amount);
+    }
+    if (value === "latest") {
+      this.incomes.sort((a, b) => new Date(a.date) - new Date(b.date));
+    }
+    if (value === "earliest") {
+      this.incomes.sort((a, b) => new Date(b.date) - new Date(a.date));
+    }
+  }
+
+  sortTransactions(value) {
+    if (value === "low") {
+      this.transactions.sort((a, b) => b.amount - a.amount);
+    }
+    if (value === "high") {
+      this.transactions.sort((a, b) => a.amount - b.amount);
+    }
+    if (value === "latest") {
+      this.incomes.sort((a, b) => new Date(a.date) - new Date(b.date));
+    }
+    if (value === "earliest") {
+      this.incomes.sort((a, b) => new Date(b.date) - new Date(a.date));
+    }
   }
   renderIncome() {
     incomeList.innerHTML = "";
@@ -129,7 +161,11 @@ inputTransactionAmount.addEventListener("change", function () {
 incomeForm.addEventListener("submit", function (event) {
   event.preventDefault();
   balanceManager.addIncome(
-    new Income(incomeName, incomeAmount, format(new Date(), "dd.MM.yyyy"))
+    new Income(
+      incomeName,
+      incomeAmount,
+      format(new Date(), "dd.MM.yyyy HH:mm:ss")
+    )
   );
   balanceManager.renderIncome();
   Toastify({
@@ -157,7 +193,7 @@ transactionsForm.addEventListener("submit", function (event) {
       new Transaction(
         transactionName,
         transactionAmount,
-        format(new Date(), "dd.MM.yyyy")
+        format(new Date(), "dd.MM.yyyy HH:mm:ss")
       )
     );
     balanceManager.renderTransaction();
@@ -213,4 +249,14 @@ transactionsList.addEventListener("click", function (event) {
     balance.textContent = `Balance: ${balanceManager.getBalance()}$`;
     li.remove();
   }
+});
+
+sortIncomes.addEventListener("change", function () {
+  balanceManager.sortIncomes(sortIncomes.value);
+  balanceManager.renderIncome();
+});
+
+sortTransactions.addEventListener("change", function () {
+  balanceManager.sortTransactions(sortTransactions.value);
+  balanceManager.renderTransaction();
 });
