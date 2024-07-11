@@ -86,10 +86,10 @@ class BalanceManager {
       this.transactions.sort((a, b) => a.amount - b.amount);
     }
     if (value === "latest") {
-      this.incomes.sort((a, b) => new Date(a.date) - new Date(b.date));
+      this.transactions.sort((a, b) => new Date(a.date) - new Date(b.date));
     }
     if (value === "earliest") {
-      this.incomes.sort((a, b) => new Date(b.date) - new Date(a.date));
+      this.transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
     }
   }
   renderIncome() {
@@ -175,10 +175,10 @@ incomeForm.addEventListener("submit", function (event) {
     className: "notification",
     newWindow: true,
     close: true,
-    gravity: "top", // `top` or `bottom`
-    position: "right", // `left`, `center` or `right`
-    stopOnFocus: true, // Prevents dismissing of toast on hover
-    onClick: function () {}, // Callback after click
+    gravity: "top",
+    position: "right",
+    stopOnFocus: true,
+    onClick: function () {},
   }).showToast();
   totalIncome.textContent = `Total income: ${balanceManager.getTotalIncome()}$`;
   balance.textContent = `Balance: ${balanceManager.getBalance()}$`;
@@ -204,10 +204,10 @@ transactionsForm.addEventListener("submit", function (event) {
       destination: "",
       newWindow: true,
       close: true,
-      gravity: "top", // `top` or `bottom`
-      position: "right", // `left`, `center` or `right`
-      stopOnFocus: true, // Prevents dismissing of toast on hover
-      onClick: function () {}, // Callback after click
+      gravity: "top",
+      position: "right",
+      stopOnFocus: true,
+      onClick: function () {},
     }).showToast();
     totalTransactions.textContent = `Total transactions: -${balanceManager.getTotalTransactions()}$`;
     balance.textContent = `Balance: ${balanceManager.getBalance()}$`;
@@ -221,10 +221,10 @@ transactionsForm.addEventListener("submit", function (event) {
       destination: "",
       newWindow: true,
       close: true,
-      gravity: "top", // `top` or `bottom`
-      position: "center", // `left`, `center` or `right`
-      stopOnFocus: true, // Prevents dismissing of toast on hover
-      onClick: function () {}, // Callback after click
+      gravity: "top",
+      position: "center",
+      stopOnFocus: true,
+      onClick: function () {},
     }).showToast();
   }
 });
